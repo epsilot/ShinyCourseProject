@@ -1,0 +1,47 @@
+---
+title: "ShinyAppPresentation"
+author: "M.Farkov"
+date: '2017-03-14'
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Simple Shiny application
+
+This is very simple application but it demonstrates basic concept of Shiny-like application quite well. The main goal of application is calculation of factorial for numbers in interval [1,10].
+
+## Interface
+```{r echo=FALSE}
+library(png)
+png<-readPNG('app1.png')
+plot(1:300,ty='n',axes = FALSE,ann=FALSE)
+rasterImage(png,1,1,300,250)
+```
+
+## ui.R
+ui.R code includes sidebar panel and main panel, In main panel you can find input slider. Calculated factorial values are printed in main pain.
+```{r echo=TRUE,eval=FALSE}
+library(shiny)
+shinyUI(fluidPage(
+  titlePanel("Calculate factorial"),
+  sidebarLayout(
+    sidebarPanel(
+        h3('Please select value for factorial calculation'),
+       sliderInput("input","factorial of",min = 1,max = 10,value = 10)
+    ),
+    mainPanel(h3('Factorial value'),textOutput('result'))
+    )))
+```
+
+
+## server.R
+server.R code is very simple. It takes input value which is stored in variable `input`, calculates factorial and places result to outpu variable `result`.
+```{r echo=TRUE,eval=FALSE}
+library(shiny)
+shinyServer(function(input, output) {
+  output$result <- renderText(factorial(input$input))
+})
+```
